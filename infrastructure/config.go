@@ -18,7 +18,7 @@ type Configuration struct {
 var config *Configuration
 
 func init(){
-    fileName := flag.String("config", "config", "a override config file name")
+    fileName := flag.String("envconfig", "envconfig", "a override the environment config file name")
     
     flag.Parse()
     viper.SetConfigName(*fileName) // name of config file (without extension)   

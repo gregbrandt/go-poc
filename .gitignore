@@ -1,4 +1,4 @@
-myconfig.json
+localconfig.json
 .vscode/**
 go-poc.exe
 debug
