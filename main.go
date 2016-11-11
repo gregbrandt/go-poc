@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"github.com/gorilla/mux"
 	"github.com/gregbrandt/Go-POC/apihandler"
+	_ "github.com/gregbrandt/Go-POC/infrastructure"
+	
 )
 
 const (
@@ -42,7 +44,7 @@ func main() {
 
 	log.Println("Starting redirection server")
 
-    err := http.ListenAndServe(SSLport, nil)
+    err := http.ListenAndServe(HTTPport, nil)
     if err != nil {
 		panic(fmt.Errorf("could not start http listener: %s", err))
     }

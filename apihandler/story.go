@@ -20,6 +20,7 @@ func CreateStory(w http.ResponseWriter, r *http.Request) {
 	newStory := StoryModel{}
 
 	newStory.name = r.FormValue("name")
+	newStory.content = r.FormValue("content")
     newStory.id = eh.NewUUID()
 
 	output, err := json.Marshal(newStory)
