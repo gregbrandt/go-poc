@@ -15,6 +15,12 @@ type StoryModel struct {
     content string
 }
 
+var CommandBus eh.CommandBus
+
+func init(){
+	CommandBus = infrastructure.GetCommandBus()
+}
+
 func CreateStory(w http.ResponseWriter, r *http.Request) {
 
 	newStory := StoryModel{}
@@ -39,7 +45,7 @@ func CreateStory(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	infrastructure.GetCommandBus().HandleCommand(&story.CreateStory{StoryId: newStory.id, Name: newStory.name, Content: newStory.content})
+	CommandBus.HandleCommand(&story.CreateStory{StoryId: newStory.id, Name: newStory.name, Content: newStory.content})
 }
 
 func GetStory(w http.ResponseWriter, r *http.Request) {

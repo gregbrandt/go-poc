@@ -6,9 +6,11 @@ import(
 
 func init() {
 
-	eh.RegisterEvent(func() eh.Event { return &StoryCreated{} })
-
-	eh.RegisterEvent(func() eh.Event { return &StoryAccepted{} })
+	if(eventregistered){
+		eventregistered = true
+		eh.RegisterEvent(func() eh.Event { return &StoryCreated{} })
+		eh.RegisterEvent(func() eh.Event { return &StoryAccepted{} })
+	}
 
 }
 
@@ -17,6 +19,8 @@ const (
 
 	StoryAcceptedEvent eh.EventType = "StoryAccepted"
 )
+
+var eventregistered = false
 
 // StoryCreated is an event for when an Story has been created.
 

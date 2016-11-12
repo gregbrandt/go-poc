@@ -8,18 +8,21 @@ import (
 )
 
 func init() {
+	
+	if(aggregateregistered){
+		aggregateregistered=true
+		eh.RegisterAggregate(func(id eh.UUID) eh.Aggregate {
 
-	eh.RegisterAggregate(func(id eh.UUID) eh.Aggregate {
+			return NewStoryAggregate(id)
 
-		return NewStoryAggregate(id)
-
-	})
+		})
+	}
 
 }
 
 // StoryAggregateType is the type name of the aggregate.
 const StoryAggregateType eh.AggregateType = "Story"
-
+var aggregateregistered = false
 // StoryAggregate is the root aggregate.
 
 //

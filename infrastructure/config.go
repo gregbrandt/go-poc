@@ -18,11 +18,13 @@ type Configuration struct {
 var config *Configuration
 
 func init(){
-    fileName := flag.String("envconfig", "envconfig", "a override the environment config file name")
+    fileName := flag.String("envconfig", "config", "a override the environment config file name")
+    
+    configpath := flag.String("configpath", ".", "a override the environment config file path")
     
     flag.Parse()
     viper.SetConfigName(*fileName) // name of config file (without extension)   
-    viper.AddConfigPath(".")     // optionally look for config in the working directory
+    viper.AddConfigPath(*configpath)     // optionally look for config in the working directory
     err := viper.ReadInConfig() // Find and read the config file
     if err != nil { // Handle errors reading the config file
         panic(fmt.Errorf("Fatal error config file: %s \n", err))

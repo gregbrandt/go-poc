@@ -19,8 +19,7 @@ const (
 	randomLength = 16
 )
 
-func main() {
-	
+func main() {	
 	registerRoutes()
 	log.Println("Starting redirection server")
 

@@ -1,72 +1,72 @@
-package story
+ package readmodel
 
-import ( eh "github.com/looplab/eventhorizon"
-)
+// import ( eh "github.com/looplab/eventhorizon"
+// )
 
-// Story is a read model object for an Story.
-type Story struct {
-	ID eh.UUID
+// // Story is a read model object for an Story.
+// type Story struct {
+// 	ID eh.UUID
 
-	Name string
+// 	Name string
 
-	Content string
+// 	Content string
 
-	Status string
-}
+// 	Status string
+// }
 
-// StoryProjector is a projector that updates the Storys.
-type StoryProjector struct {
-	repository eh.ReadRepository
-}
+// // StoryProjector is a projector that updates the Storys.
+// type StoryProjector struct {
+// 	repository eh.ReadRepository
+// }
 
-// NewStoryProjector creates a new StoryProjector.
-func NewStoryProjector(repository eh.ReadRepository) *StoryProjector {
+// // NewStoryProjector creates a new StoryProjector.
+// func NewStoryProjector(repository eh.ReadRepository) *StoryProjector {
 
-	p := &StoryProjector{
+// 	p := &StoryProjector{
 
-		repository: repository,
-	}
+// 		repository: repository,
+// 	}
 
-	return p
-}
+// 	return p
+// }
 
-// HandlerType implements the HandlerType method of the EventHandler interface.
-func (p *StoryProjector) HandlerType() eh.EventHandlerType {
+// // HandlerType implements the HandlerType method of the EventHandler interface.
+// func (p *StoryProjector) HandlerType() eh.EventHandlerType {
 
-	return eh.EventHandlerType("StoryProjector")
+// 	return eh.EventHandlerType("StoryProjector")
 
-}
+// }
 
-// HandleEvent implements the HandleEvent method of the EventHandler interface.
-func (p *StoryProjector) HandleEvent(event eh.Event) {
+// // HandleEvent implements the HandleEvent method of the EventHandler interface.
+// func (p *StoryProjector) HandleEvent(event eh.Event) {
 
-	switch event := event.(type) {
+// 	switch event := event.(type) {
 
-	case *StoryCreated:
+// 	case *StoryCreated:
 
-		i := &Story{
+// 		i := &Story{
 
-			ID: event.StoryId,
+// 			ID: event.StoryId,
 
-			Name: event.Name,
+// 			Name: event.Name,
 
-			Content: event.Content,
+// 			Content: event.Content,
 
-			Status: "created",
-		}
+// 			Status: "created",
+// 		}
 
-		p.repository.Save(i.ID, i)
+// 		p.repository.Save(i.ID, i)
 
-	case *StoryAccepted:
+// 	case *StoryAccepted:
 
-		m, _ := p.repository.Find(event.StoryId)
+// 		m, _ := p.repository.Find(event.StoryId)
 
-		i := m.(*Story)
+// 		i := m.(*Story)
 
-		i.Status = "approved"
+// 		i.Status = "approved"
 
-		p.repository.Save(i.ID, i)
+// 		p.repository.Save(i.ID, i)
 
-	}
+// 	}
 
-}
+// }
