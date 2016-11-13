@@ -6,14 +6,16 @@ import (
     "github.com/gregbrandt/go-poc/apihandler"
     "net/http"
     "github.com/gregbrandt/go-poc/domain"
+    "github.com/stretchr/testify/assert"
+    "github.com/stretchr/testify/mock"
 )
 
 type MockCommandBus struct {
-	commands []eh.Command
+	mock.Mock
 }
 
-func (b *MockCommandBus) HandleCommand(command eh.Command) error {    
-    b.commands = append(b.commands,command)
+func (b *MockCommandBus) HandleCommand(command eh.Command) error { 
+    b.Called(command)
 	return nil
 }
 
@@ -27,13 +29,14 @@ func (r *MockRequest) FormValue(key string) string {
 }
 
 func TestCreateStory(t *testing.T) {
+    mockCommandBus := new(MockCommandBus)    
+    mockCommandBus.On("HandleCommand",mock.AnythingOfType("*domain.CreateStory")).Return(nil)
 
-    mockCommandBus := &MockCommandBus{commands : make([]eh.Command,0)}
     apihandler.CommandBus = mockCommandBus
 	createStoryHandle := http.HandlerFunc(apihandler.CreateStory)
 	test := apihandler.GenerateHandleTester(t, createStoryHandle)
 
-	params := `{"name":"test name", "content":"test content"}`
+	params := "{'name':'test name', 'content':'test content'}"
 
 	w := test("POST", params)
 	if w.Code != http.StatusOK {
@@ -43,15 +46,18 @@ func TestCreateStory(t *testing.T) {
 			http.StatusOK,
 		)
 	}
-    if(mockCommandBus.commands[0]== nil){
-        t.Error("Command bus not called")
-    }
 
-    switch cmd := mockCommandBus.commands[0].(type) {
+
+   mockCommandBus.AssertCalled(t,"HandleCommand",mock.AnythingOfType("*domain.CreateStory") )
+   assert.NotNil(t,mockCommandBus.Calls[0].Arguments[0])
+   
+    switch cmd := mockCommandBus.Calls[0].Arguments[0].(type) {
 
 	case *domain.CreateStory:
-        if(cmd.Name == "test name"){
-            t.Error("Command bus not called")
-        }
-	}    
+        assert.Equal(t, "test name1", cmd.Name)
+	
+    default:
+        t.Error("Invalid command type")
+    }
+
 }
