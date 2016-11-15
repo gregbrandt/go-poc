@@ -9,14 +9,12 @@ import (
 
 func init() {
 	
-	if(aggregateregistered){
-		aggregateregistered=true
 		eh.RegisterAggregate(func(id eh.UUID) eh.Aggregate {
 
 			return NewStoryAggregate(id)
 
 		})
-	}
+	
 
 }
 
@@ -67,8 +65,8 @@ func (i *StoryAggregate) HandleCommand(command eh.Command) error {
 	switch command := command.(type) {
 
 	case *CreateStory:
-
-		i.StoreEvent(&StoryCreated{command.StoryId, command.Name, command.Content})
+		fmt.Print("valid cast")
+	    i.StoreEvent(&StoryCreated{command.StoryId, command.Name, command.Content})
 
 		return nil
 

@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/gregbrandt/Go-POC/apihandler"
 	_ "github.com/gregbrandt/Go-POC/infrastructure"
+	_ "github.com/gregbrandt/Go-POC/readmodel"
 	
 )
 

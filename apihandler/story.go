@@ -45,7 +45,12 @@ func CreateStory(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	CommandBus.HandleCommand(&story.CreateStory{StoryId: newStory.id, Name: newStory.name, Content: newStory.content})
+	err = CommandBus.HandleCommand(&story.CreateStory{StoryId: newStory.id, Name: newStory.name, Content: newStory.content})
+	
+	 if err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+        return
+    }
 }
 
 func GetStory(w http.ResponseWriter, r *http.Request) {

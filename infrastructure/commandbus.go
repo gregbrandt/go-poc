@@ -11,7 +11,7 @@ import (
 )
 
 var commandbus *ehcommandbus.CommandBus
-
+var eventBus *eventbus.EventBus
 
 
 func init(){
@@ -27,7 +27,7 @@ func init(){
 	eventStore, err := eventstore.NewEventStore(url, "demo")
     
 	// Create the event bus that distributes events.
-	eventBus := eventbus.NewEventBus()
+	eventBus = eventbus.NewEventBus()
 	eventBus.AddObserver(&EventBusLogger{})
 
 	// Create the aggregate repository.
@@ -77,4 +77,8 @@ func (l *EventBusLogger) Notify(event eh.Event) {
 
 func GetCommandBus() *ehcommandbus.CommandBus {
 	return commandbus
+}
+
+func GetEventBus() *eventbus.EventBus {
+	return eventBus
 }

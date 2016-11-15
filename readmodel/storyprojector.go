@@ -1,72 +1,93 @@
  package readmodel
 
-// import ( eh "github.com/looplab/eventhorizon"
-// )
+import (
+     eh "github.com/looplab/eventhorizon"
+	story "github.com/gregbrandt/Go-POC/domain"
+	readrepository "github.com/looplab/eventhorizon/readrepository/mongodb"
+    "github.com/gregbrandt/Go-POC/infrastructure"
+    "os"
+)
 
-// // Story is a read model object for an Story.
-// type Story struct {
-// 	ID eh.UUID
+// Story is a read model object for an Story.
+type Story struct {
+	ID eh.UUID
 
-// 	Name string
+	Name string
 
-// 	Content string
+	Content string
 
-// 	Status string
-// }
+	Status string
+}
 
-// // StoryProjector is a projector that updates the Storys.
-// type StoryProjector struct {
-// 	repository eh.ReadRepository
-// }
+// StoryProjector is a projector that updates the Storys.
+type StoryProjector struct {
+	repository eh.ReadRepository
+}
 
-// // NewStoryProjector creates a new StoryProjector.
-// func NewStoryProjector(repository eh.ReadRepository) *StoryProjector {
 
-// 	p := &StoryProjector{
+func init(){
+    host := os.Getenv("MONGO_PORT_27017_TCP_ADDR")
+	port := os.Getenv("MONGO_PORT_27017_TCP_PORT")
 
-// 		repository: repository,
-// 	}
+	url := "localhost"
+	if host != "" && port != "" {
+		url = host + ":" + port
+	}
+    eventBus := infrastructure.GetEventBus()
+	repository,_ := readrepository.NewReadRepository(url, "demo", "story")
+	projector := NewStoryProjector(repository)
+	eventBus.AddHandler(projector, story.StoryCreatedEvent)
+}
 
-// 	return p
-// }
 
-// // HandlerType implements the HandlerType method of the EventHandler interface.
-// func (p *StoryProjector) HandlerType() eh.EventHandlerType {
+// NewStoryProjector creates a new StoryProjector.
+func NewStoryProjector(repository eh.ReadRepository) *StoryProjector {
 
-// 	return eh.EventHandlerType("StoryProjector")
+	p := &StoryProjector{
 
-// }
+		repository: repository,
+	}
 
-// // HandleEvent implements the HandleEvent method of the EventHandler interface.
-// func (p *StoryProjector) HandleEvent(event eh.Event) {
+	return p
+}
 
-// 	switch event := event.(type) {
+// HandlerType implements the HandlerType method of the EventHandler interface.
+func (p *StoryProjector) HandlerType() eh.EventHandlerType {
 
-// 	case *StoryCreated:
+	return eh.EventHandlerType("StoryProjector")
 
-// 		i := &Story{
+}
 
-// 			ID: event.StoryId,
+// HandleEvent implements the HandleEvent method of the EventHandler interface.
+func (p *StoryProjector) HandleEvent(event eh.Event) {
 
-// 			Name: event.Name,
+	switch event := event.(type) {
 
-// 			Content: event.Content,
+	case *story.StoryCreated:
 
-// 			Status: "created",
-// 		}
+		i := &Story{
 
-// 		p.repository.Save(i.ID, i)
+			ID: event.StoryId,
 
-// 	case *StoryAccepted:
+			Name: event.Name,
 
-// 		m, _ := p.repository.Find(event.StoryId)
+			Content: event.Content,
 
-// 		i := m.(*Story)
+			Status: "created",
+		}
 
-// 		i.Status = "approved"
+		p.repository.Save(i.ID, i)
 
-// 		p.repository.Save(i.ID, i)
+	case *story.StoryAccepted:
 
-// 	}
+		m, _ := p.repository.Find(event.StoryId)
 
-// }
+		i := m.(*Story)
+
+		i.Status = "approved"
+
+		p.repository.Save(i.ID, i)
+
+	}
+
+}
