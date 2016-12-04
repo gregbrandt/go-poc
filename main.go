@@ -39,6 +39,8 @@ func registerRoutes(){
 			Methods("POST")
 	routes.HandleFunc(storyRoot + "/{id:[0-9]+}", apihandler.GetStory).
 			Methods("GET")
-
+	
+	routes.PathPrefix("/").Handler(http.FileServer(http.Dir("www/dist")))
+	
 	http.Handle("/", routes)
 }

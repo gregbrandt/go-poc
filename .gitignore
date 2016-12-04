@@ -2,3 +2,5 @@ localconfig.json
 .vscode/**
 go-poc.exe
 debug
+www/node_modules
+www/dist
