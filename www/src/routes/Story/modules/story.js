@@ -1,3 +1,7 @@
+
+
+import { browserHistory } from 'react-router'
+
 // ------------------------------------
 // Constants
 // ------------------------------------
@@ -8,16 +12,24 @@ export const STORY_SAVE = 'STORY_SAVE'
 // Actions
 // ------------------------------------
 export function create() {
-  return {
-    type: STORY_CREATE,
-    story: { name: "", content: "" }
+  return (dispatch, getState) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        dispatch({
+          type: STORY_CREATE,
+          story: { name: "", content: "" }
+        });
+        dispatch(push('/story/story-form'))
+        //browserHistory.push('/story/story-form');
+        resolve();
+      }, 200)
+    })
   }
 }
 
 /*  This is a thunk, meaning it is a function that immediately
     returns a function for lazy evaluation. It is incredibly useful for
     creating async actions, especially when combined with redux-thunk!
-
     NOTE: This is solely for demonstration purposes. In a real application,
     you'd probably want to dispatch an action of COUNTER_DOUBLE and let the
     reducer take care of this logic.  */
@@ -27,7 +39,7 @@ export const save = (story) => {
     return new Promise((resolve) => {
       setTimeout(() => {
         dispatch({
-          type: STORY_CREATE,
+          type: STORY_SAVE,
           story: story
         })
         resolve()
@@ -46,8 +58,8 @@ export const actions = {
 // Action Handlers
 // ------------------------------------
 const ACTION_HANDLERS = {
-  [STORY_CREATE]: (state, action) => { return{ ...state, currentstory : action.story }},
-  [STORY_SAVE]: (state, action) => { return{ ...state,  currentstory : action.story }}
+  [STORY_CREATE]: (state, action) => { return { ...state, currentstory: action.story } },
+  [STORY_SAVE]: (state, action) => { return { ...state, currentstory: action.story } }
 }
 
 // ------------------------------------

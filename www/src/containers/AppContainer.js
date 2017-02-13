@@ -12,6 +12,12 @@ class AppContainer extends Component {
     return false
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+        children: nextProps.children
+    });
+}
+
   render () {
     const { routes, store } = this.props
 

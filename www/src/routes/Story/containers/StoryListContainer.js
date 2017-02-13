@@ -16,10 +16,12 @@ const mapDispatchToProps = {
   create: () => create()
 }
 
-const mapStateToProps = (state) => ({
-  currentstory: state.currentstory,
-  stories: state.stories
-})
+const mapStateToProps = (state) => (
+  {
+    currentstory: state.story.currentstory,
+    stories: state.story.stories
+  }
+)
 
 /*  Note: mapStateToProps is where you should use `reselect` to create selectors, ie:
 

@@ -2,7 +2,6 @@ import React from 'react'
 
 export const StoryList = (props) => (
   <div style={{ margin: '0 auto' }} >
-    <h2>Story: {props.currentstory.name}</h2>
     <button className='btn btn-default' onClick={props.create}>
       Create
     </button>
@@ -20,5 +19,9 @@ StoryList.propTypes = {
   stories: React.PropTypes.array.isRequired,
   create: React.PropTypes.func.isRequired
 }
+
+StoryList.contextTypes = {
+    router: PropTypes.object,
+  };
 
 export default StoryList
