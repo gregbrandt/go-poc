@@ -20,8 +20,8 @@ StoryList.propTypes = {
   create: React.PropTypes.func.isRequired
 }
 
-StoryList.contextTypes = {
-    router: PropTypes.object,
-  };
+// StoryList.contextTypes = {
+//     router: PropTypes.object,
+//   };
 
 export default StoryList

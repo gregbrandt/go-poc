@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strings"
 	"log"
 	"net/http"
 	"github.com/gorilla/mux"
@@ -34,18 +35,19 @@ func registerRoutes(){
 	rootURL := "/api"
 	routes := mux.NewRouter()
 
-	storyRoot := rootURL + "/story1" 
+	storyRoot := rootURL + "/story" 
 	routes.HandleFunc(storyRoot + "/", apihandler.CreateStory).
 			Methods("POST")
 	routes.HandleFunc(storyRoot + "/{id:[0-9]+}", apihandler.GetStory).
 			Methods("GET")
-	routes.PathPrefix("/").Handler(http.FileServer(http.Dir("www/dist")))
+	//routes.PathPrefix("/").Handler(http.FileServer(http.Dir("www/dist")))
 	// routes.Handle(`/{rest:[a-zA-Z0-9=\-\/]+}`,http.FileServer(http.Dir("www/dist")))
-	// r.Handle("/js", http.FileServer(http.Dir("../sitelocation/js")))
-    // r.Handle("/css", http.FileServer(http.Dir("../sitelocation/css")))
-	// routes.Handle(`/{[a-zA-Z0-9=\-]+\.js$}`,http.FileServer(http.Dir("www/dist")))
-	// routes.Handle(`/{[a-zA-Z0-9=\-]+\.css$}`,http.FileServer(http.Dir("www/dist")))
-	// routes.NotFoundHandler = http.HandlerFunc(notFound) 
+	//routes.Handle(`/vendor.2a4c3e544c08ac8adc46.js`, http.FileServer(http.Dir("www/dist")))
+	//routes.Handle(`/app.2a4c3e544c08ac8adc46.js`, http.FileServer(http.Dir("www/dist")))
+     //routes.Handle(`*\.css`,http.FileServer(http.Dir("www/dist")))
+//	 routes.HandleFunc(`\/*[a-zA-Z0-9=\/\-\.]+\.js$`,jscsHandler)
+//	 routes.HandleFunc(`\/*[a-zA-Z0-9=\/\-\.]+\.css$}`,jscsHandler)
+	routes.NotFoundHandler = http.HandlerFunc(notFound) 
 	// routes.Handle("/*",http.FileServer(http.File("www/dist/index.html")))
 	// routes.PathPrefix("/").Handler(http.FileServer(http.Dir("www/dist")))
 
@@ -55,7 +57,22 @@ func registerRoutes(){
 }
 
 
-// func notFound(w http.ResponseWriter, r *http.Request) {
-// 	log.Println(r.URL.RawPath);
-//     http.ServeFile(w, r, "www/dist/index.html")
-// }
+func notFound(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.URL.RawPath);
+	
+	if(strings.HasSuffix(r.URL.Path,".map")){
+    	http.ServeFile(w, r, "www/dist" + r.URL.Path)	
+	}
+
+
+	if(strings.HasSuffix(r.URL.Path,".js")){
+    	http.ServeFile(w, r, "www/dist" + r.URL.Path)	
+	}
+
+    if(strings.HasSuffix(r.URL.Path,".css")){
+    	http.ServeFile(w, r, "www/dist" + r.URL.Path)	
+	}
+
+	http.ServeFile(w, r, "www/dist/index.html")
+}
+

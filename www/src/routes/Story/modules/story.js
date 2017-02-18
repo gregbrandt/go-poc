@@ -1,6 +1,6 @@
 
 
-import { browserHistory } from 'react-router'
+//import { browserHistory } from 'react-router'
 
 // ------------------------------------
 // Constants
@@ -19,7 +19,7 @@ export function create() {
           type: STORY_CREATE,
           story: { name: "", content: "" }
         });
-        dispatch(push('/story/story-form'))
+        //dispatch(push('/story/story-form'))
         //browserHistory.push('/story/story-form');
         resolve();
       }, 200)
