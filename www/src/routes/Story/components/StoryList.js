@@ -1,4 +1,6 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { create, save } from '../modules/story'
 
 export const StoryList = (props) => (
   <div style={{ margin: '0 auto' }} >
@@ -20,8 +22,17 @@ StoryList.propTypes = {
   create: React.PropTypes.func.isRequired
 }
 
-// StoryList.contextTypes = {
-//     router: PropTypes.object,
-//   };
+const mapDispatchToProps = {
+  create: () => create()
+}
 
-export default StoryList
+const mapStateToProps = (state) => (
+  {
+    stories: state.story.entities.stories
+  }
+)
+
+
+//export default StoryList
+
+export default connect(mapStateToProps, mapDispatchToProps)(StoryList)

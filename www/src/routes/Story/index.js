@@ -1,10 +1,34 @@
+import { combineReducers } from 'redux'
+import { combineForms } from 'react-redux-form'
 import { injectReducer } from '../../store/reducers'
 
-export default (store) => ({
+const CreateReducers = (store) => {
+  const storyreducer = require('./modules/story').default
+  //const storyForm = { name: null, content: null }
+
+
+  // const unclaimed = combineForms({
+  //   inviteManager: initialState,
+  // }, 'shared.unclaimed'); // must state exact path of deep reducer
+
+
+  // const store = createStore(combineReducers({
+  //   shared: combineReducers({
+  //     storyForm,
+  //   }),
+  // }), applyMiddleware(createLogger(), thunk));
+
+
+  const storyForm = ({
+    currentstory: { name: null, content: null },
+  }, 'story.storyForm'); // must state exact path of deep reducer
+
+  const reducer = combineReducers({ entities: storyreducer, storyForm })
+  injectReducer(store, { key: 'story', reducer })
+}
+
+export const StoryRoute = (store) => ({
   path: 'story',
-  childRoutes: [
-    CreateStoryFormRoute(store)
-  ],
 
   /*  Async getComponent is only invoked when route matches   */
   getComponent(nextState, cb) {
@@ -13,11 +37,9 @@ export default (store) => ({
     require.ensure([], (require) => {
       /*  Webpack - use require callback to define
           dependencies for bundling   */
-      const StoryList = require('./containers/StoryListContainer').default
-      const reducer = require('./modules/story').default
 
-      /*  Add the reducer to the store on key 'counter'  */
-      injectReducer(store, { key: 'story', reducer })
+      const StoryList = require('./components/StoryList').default
+      CreateReducers(store)
 
       /*  Return getComponent   */
       cb(null, StoryList)
@@ -27,9 +49,9 @@ export default (store) => ({
   }
 })
 
-export function CreateStoryFormRoute(store) {
+export const StoryFormRoute = (store) => {
   return {
-    path: 'story-form',
+    path: 'story/story-form',
     /*  Async getComponent is only invoked when route matches   */
     getComponent(nextState, cb) {
       /*  Webpack - use 'require.ensure' to create a split point
@@ -37,12 +59,8 @@ export function CreateStoryFormRoute(store) {
       require.ensure([], (require) => {
         /*  Webpack - use require callback to define
             dependencies for bundling   */
-        const StoryForm = require('./containers/StoryFormContainer').default
-        const reducer = require('./modules/story').default
-
-        /*  Add the reducer to the store on key 'counter'  */
-        injectReducer(store, { key: 'story', reducer })
-
+        const StoryForm = require('./components/StoryForm').default
+        CreateReducers(store)
         /*  Return getComponent   */
         cb(null, StoryForm)
 

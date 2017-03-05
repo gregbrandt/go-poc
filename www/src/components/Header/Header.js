@@ -13,6 +13,10 @@ export const Header = () => (
       Stories
     </Link>
     {' · '}
+    <Link to='/story/story-form' activeClassName='route--active'>
+      Create
+    </Link>
+    {' · '}
     <Link to='/counter' activeClassName='route--active'>
       Counter
     </Link>

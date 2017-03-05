@@ -16,4 +16,10 @@ CoreLayout.propTypes = {
   children : React.PropTypes.element.isRequired
 }
 
+CoreLayout.componentWillReceiveProps = function(nextProps) {
+    this.setState({
+        children: nextProps.children
+    });
+}
+
 export default CoreLayout

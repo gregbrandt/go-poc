@@ -1,6 +1,7 @@
 
 
-//import { browserHistory } from 'react-router'
+import { browserHistory } from 'react-router'
+import { formReducer } from 'react-redux-form'
 
 // ------------------------------------
 // Constants
@@ -17,10 +18,10 @@ export function create() {
       setTimeout(() => {
         dispatch({
           type: STORY_CREATE,
-          story: { name: "", content: "" }
+          currentstory: { name: "", content: "" }
         });
         //dispatch(push('/story/story-form'))
-        //browserHistory.push('/story/story-form');
+        browserHistory.push('/story/story-form');
         resolve();
       }, 200)
     })
@@ -66,11 +67,10 @@ const ACTION_HANDLERS = {
 // Reducer
 // ------------------------------------
 const initialState = {
-  currentstory: null,
   stories: []
 }
+
 export default function storyReducer(state = initialState, action) {
   const handler = ACTION_HANDLERS[action.type]
-
   return handler ? handler(state, action) : state
 }

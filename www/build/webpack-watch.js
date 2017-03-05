@@ -9,8 +9,9 @@ function webpackWatcher (webpackConfig, statsFormat) {
     const compiler = webpack(webpackConfig)
     
     compiler.watch({ // watch options:
-      aggregateTimeout: 500, // wait so long for more changes
-      poll: true // use polling instead of native watchers
+      aggregateTimeout: 1000, // wait so long for more changes
+      poll: true, // use polling instead of native watchers
+      ignore: /node_modules/
       // pass a number to set the polling interval
     },(err, stats) => {
       if (err) {
